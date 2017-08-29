@@ -1,0 +1,16 @@
+<script>
+const a = [1,2,3,4];
+const b = [...a, 5];
+const c = [0, ...a, 5];
+console.log('Value of a = ', a);
+console.log('Value of b = ', b);
+console.log('Value of c = ', c);
+
+const obj1 = { a: 'Tree', b: 'Flower', c: 'Fruit' };
+const obj2 = { ...obj1, a: 'plant' };
+const obj3 = { ...obj1, d: 'seed' };
+
+console.log('Value of obj1 = ', obj1);
+console.log('Value of obj2 = ', obj2);
+console.log('Value of obj3 = ', obj3);
+</script>
