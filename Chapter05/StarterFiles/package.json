@@ -1,24 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Weather Widget</title>
-</head>
-<body>
-  <div class="content-area">
-    <h3>Large</h3>
-    <div class="large-container">
-
-    </div>
-    <h3>Medium</h3>
-    <div class="medium-container">
-
-    </div>
-    <h3>Small</h3>
-    <div class="small-container">
-
-    </div>
-  </div>
-  <script src="dist/home.js"></script>
-</body>
-</html>
+{
+  "name": "weather-widget",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "webpack": "webpack",
+    "watch": "webpack-dev-server"
+  },
+  "author": "Dani Akash S",
+  "license": "ISC",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-custom-element-classes": "^0.1.0",
+    "babel-preset-env": "^1.4.0",
+    "clean-webpack-plugin": "^0.1.16",
+    "css-loader": "^0.28.1",
+    "dotenv": "^4.0.0",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "img-loader": "^2.0.0",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "purifycss-webpack": "^0.6.1",
+    "style-loader": "^0.17.0",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.5.0",
+    "webpack-dev-server": "^2.4.5"
+  }
+}

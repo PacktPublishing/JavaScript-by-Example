@@ -1,40 +1,37 @@
-'use strict';
+# swagger configuration file
 
-var SwaggerExpress = require('swagger-express-mw');
-var app = require('express')();
+# values in the swagger hash are system configuration for swagger-node
+swagger:
 
-var swaggerTools = require('swagger-tools');
-var YAML = require('yamljs');
-var swaggerDoc = YAML.load('./api/swagger/swagger.yaml');
+  fittingsDirs: [ api/fittings ]
+  defaultPipe: null
+  swaggerControllerPipe: swagger_controllers  # defines the standard processing pipe for controllers
 
-module.exports = app; // for testing
+  # values defined in the bagpipes key are the bagpipes pipes and fittings definitions
+  # (see https://github.com/apigee-127/bagpipes)
+  bagpipes:
 
-var config = {
-  appRoot: __dirname // required config
-};
+    _router:
+      name: swagger_router
+      mockMode: false
+      mockControllersDirs: [ api/mocks ]
+      controllersDirs: [ api/controllers ]
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+    _swagger_validate:
+      name: swagger_validator
+      validateResponse: true
 
-swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
-  // Serve the Swagger documents and Swagger UI
-  app.use(middleware.swaggerUi());
-});
+    # pipe for all swagger-node controllers
+    swagger_controllers:
+      - onError: json_error_handler
+      - cors
+      - swagger_security
+      - _swagger_validate
+      - express_compatibility
+      - _router
 
-SwaggerExpress.create(config, function(err, swaggerExpress) {
-  if (err) { throw err; }
+    # pipe to serve swagger (endpoint is in swagger.yaml)
+    swagger_raw:
+      name: swagger_raw
 
-  // install middleware
-  swaggerExpress.register(app);
-
-  var port = process.env.PORT || 10010;
-  app.listen(port);
-
-  console.log('The URL to be added in the .env file: http://127.0.0.1:' + port);
-
-  console.log('Server Running! Visit http://127.0.0.1:' + port + '/docs for API documentation');
-});
-
+# any other values in this file are just loaded into the config for application access...

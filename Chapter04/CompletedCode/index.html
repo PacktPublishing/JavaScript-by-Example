@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Video Call App</title>
+  <!--<link rel="stylesheet" href="dist/home.css">-->
+</head>
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Video Call App</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="create-room-area" id="createRoomSection">
+      <h1>Video Call Application</h1>
+
+      <div class="input-area">
+        <div class="form-group room-input">
+          <input type="text" placeholder="Enter your room name..." class="form-control" id="roomNameInput">
+        </div>
+        <div class="form-group create-room-button">
+          <button class="btn btn-primary" id="createRoom">Create Room</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-area hidden" id="infoSection">
+      <h2 class="room-name" id="roomNameText">Room Name: </h2>
+      <div class="room-info">
+        <p>To invite others, Share the below link</p>
+        <div class="room-text">
+          <p class="room-url" id="roomUrl"></p>
+          <button class="copy hidden btn btn-primary">Copy</Button>
+          <button class="copied hidden btn btn-success">Copied</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-area">
+      <div class="video-container">
+        <video class="video-player" id="localVideo"></video>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script src="dist/home.js"></script>
+</body>
+</html>

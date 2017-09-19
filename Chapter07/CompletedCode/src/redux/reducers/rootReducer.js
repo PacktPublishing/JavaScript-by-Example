@@ -1,13 +1,12 @@
-import initialState from '../store/initialState';
-import actions from '../actionTypes/actionTypes';
+import { combineReducers } from 'redux';
+import postsReducer from './postsReducer';
+import authorsReducer from './authorsReducer';
+import ajaxCallsReducer from './ajaxCallsReducer';
 
-const authorsReducer = (state = initialState.authors, action) => {
-  switch(action.type) {
+const rootReducer = combineReducers({
+  posts: postsReducer,
+  authors: authorsReducer,
+  ajaxCalls: ajaxCallsReducer,
+});
 
-    default:
-      return state;
-  }
-
-};
-
-export default authorsReducer;
+export default rootReducer;

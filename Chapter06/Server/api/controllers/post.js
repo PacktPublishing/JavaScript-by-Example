@@ -1,40 +1,31 @@
 module.exports = {
-  addComment,
+  addPost,
+  post,
 };
 
 const db = require('../helpers/db').db;
 const _ = require('lodash');
 
-function addComment(req, res) {
+function addPost(req, res) {
+    setTimeout(() => {
+      db.get('posts')
+          .unshift(req.body)
+          .write()
+          .then(() => res.status(200).json({message: 'Post added Successfully'}))
+          .catch(error => res.status(500).json({message: 'Unable to add post!'}));
+    }, 3000);
+}
 
-    const allPosts = db.get('posts').value();
+function post(req, res) {
+    const posts = db.get('posts').value();
 
-    const requiredPost = db.get('posts')
-        .find({id: req.body.postId})
-        .value();
-
-    if(!requiredPost) {
-        res.status(400).json({message: 'Not a valid post!'});
-        return;
-    }
-
-    requiredPost.comments = [{
-        id: req.body.id,
-        name: req.body.name,
-        comment: req.body.comment,
-    }, ...requiredPost.comments];
-
-    const newPosts = allPosts.map(post => {
-        if(post.id === requiredPost.id) return requiredPost;
-        return post;
-    });
+    const post = _.find(posts, {id: req.swagger.params.id.value});
 
     setTimeout(() => {
-      db
-      .set('posts', newPosts)
-      .write()
-      .then(res.status(200).json({message: 'Comment added successfully'}))
-      .catch(res.status(500).json({message: 'Unable to add comment'}));
+      if(post) {
+          res.status(200).json(post);
+          return;
+      }
+      res.status(400).json({message: 'no posts found'})
     }, 3000);
-
 }

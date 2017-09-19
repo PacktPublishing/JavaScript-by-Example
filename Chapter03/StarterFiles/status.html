@@ -1,1 +1,53 @@
-import './general';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Event Registration</title>
+</head>
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Event Registration</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <li class="active"><a href="status.html">Status</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </nav>
+  <div class="container">
+    <h1 class="title">Interested People</h1>
+    <div id="loadingIndicator">
+      <p>Data loading...</p>
+      <image src="./src/assets/images/loading.gif" class="loading-indicator"></image>
+    </div>
+    <div id="loadingError" class="hidden">
+      <h3>Unable to load data...Try refreshing the page.</h3>
+    </div>
+    <ul class="nav nav-tabs hidden" id="tabArea">
+      <li role="presentation" class="active"><a href="" id="experienceTab">Experience</a></li>
+      <li role="presentation"><a href="" id="professionTab">Profession</a></li>
+      <li role="presentation"><a href="" id="ageTab">Age</a></li>
+    </ul>
+    <div class="chart-area hidden" id="chartArea">
+      <canvas id="experienceChart"></canvas>
+      <canvas id="professionChart"></canvas>
+      <canvas id="ageChart"></canvas>
+    </div>
+  </div>
+  <script src="dist/status.js"></script>
+</body>
+</html>

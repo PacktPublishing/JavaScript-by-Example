@@ -1,15 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
 
-const ErrorMessage = ({title, message}) => (
-  <div className="alert alert-danger">
-    <strong>{title}</strong> {message}
+import routes from '../../routes';
+
+const PostSummary = ({post}) => (
+  <div className={`post-container container`}>
+    <h3>{post.title}</h3>
+    <p>{post.author}</p>
+    <p>{post.content}</p>
+    <NavLink className={`btn btn-primary read-more-button`} to={routes.post.replace(':id', post.id)}>Read More</NavLink>
   </div>
 );
 
-ErrorMessage.propTypes = {
-  title: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
+PostSummary.propTypes = {
+  post: PropTypes.object.isRequired,
 };
 
-export default ErrorMessage;
+export default PostSummary;

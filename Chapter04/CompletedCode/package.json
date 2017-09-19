@@ -1,58 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Video Call App</title>
-  <!--<link rel="stylesheet" href="dist/home.css">-->
-</head>
-<body>
-
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/">Video Call App</a>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container">
-
-    <div class="create-room-area" id="createRoomSection">
-      <h1>Video Call Application</h1>
-
-      <div class="input-area">
-        <div class="form-group room-input">
-          <input type="text" placeholder="Enter your room name..." class="form-control" id="roomNameInput">
-        </div>
-        <div class="form-group create-room-button">
-          <button class="btn btn-primary" id="createRoom">Create Room</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="info-area hidden" id="infoSection">
-      <h2 class="room-name" id="roomNameText">Room Name: </h2>
-      <div class="room-info">
-        <p>To invite others, Share the below link</p>
-        <div class="room-text">
-          <p class="room-url" id="roomUrl"></p>
-          <button class="copy hidden btn btn-primary">Copy</Button>
-          <button class="copied hidden btn btn-success">Copied</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="video-area">
-      <div class="video-container">
-        <video class="video-player" id="localVideo"></video>
-      </div>
-    </div>
-
-  </div>
-
-
-  <script src="dist/home.js"></script>
-</body>
-</html>
+{
+  "name": "video-call-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "webpack": "webpack",
+    "watch": "webpack-dev-server"
+  },
+  "author": "Dani Akash S",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1",
+    "simplewebrtc": "^3.0.1",
+    "toastr": "^2.1.2",
+    "webrtc-adapter": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-custom-element-classes": "^0.1.0",
+    "babel-preset-env": "^1.4.0",
+    "babel-preset-es2015": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.16",
+    "css-loader": "^0.28.1",
+    "dotenv": "^4.0.0",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "glob-all": "^3.1.0",
+    "img-loader": "^2.0.0",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "purifycss-webpack": "^0.6.1",
+    "style-loader": "^0.17.0",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.5.0",
+    "webpack-dev-server": "^2.4.5"
+  }
+}

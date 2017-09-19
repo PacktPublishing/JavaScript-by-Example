@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+.posts-container {
+  margin-top: 15px;
+}
+.post-container {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.read-more-button {
+  align-self: flex-end;
+}
+.author-name-input {
+  margin-top: 30px;
+}
+.loadingIndicator {
+  max-height: 50px;
+  max-width: 50px;
+}

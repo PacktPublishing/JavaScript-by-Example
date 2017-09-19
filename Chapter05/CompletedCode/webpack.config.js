@@ -1,141 +1,186 @@
-import apiCall from './services/api/apiCall';
-import './lib/skycons';
+/**
+ * Environment variables used in this configuration:
+ * NODE_ENV
+ * API_KEY
+ */
 
-class Weather extends HTMLElement {
-  constructor() {
-    super();
+require('dotenv').config()
+const webpack = require('webpack');
+const glob = require('glob');
+const PurifyCSSPlugin = require('purifycss-webpack');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-    this.$shadowRoot = this.attachShadow({mode: 'open'});
-    this.$shadowRoot.innerHTML = `
-      <style>
-      .weather-container {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        background-color: silver;
-        justify-content: space-between;
-      }
-      .title {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .details {
-        flex: 2;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-      }
-      .day-icon {
-        flex: 1;
-        max-height: 100%;
-        max-width: 100%;
-      }
-      .text {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-      }
-      .text-content {
-        margin: 0px;
-      }
-      </style>
-      <div class="weather-container">
-        <div class="title">
-          <h2 id="city">Loading...</h2>
-        </div>
-        <div class="details">
-          <canvas id="dayIcon" class="day-icon"></canvas>
-          <div class="text">
-            <h2 class="text-content" id="temperature">--</h2>
-            <p class="text-content" id="time">--</p>
-            <p class="text-content" id="summary">--</p>
-          </div>
-        </div>
-      </div>
-    `;
-  }
+/**
+ * flag Used to check if the environment is production or not
+ */
+const isProduction = (process.env.NODE_ENV === 'production');
 
-  connectedCallback() {
-    this.latitude = this.getAttribute('latitude');
-    this.longitude = this.getAttribute('longitude');
+/**
+ * Include hash to filenames for cache busting - only at production
+ */
+const fileNamePrefix = isProduction? '[chunkhash].' : '';
 
-    this.$icon = this.$shadowRoot.querySelector('#dayIcon');
-    this.$city = this.$shadowRoot.querySelector('#city');
-    this.$temperature = this.$shadowRoot.querySelector('#temperature');
-    this.$summary = this.$shadowRoot.querySelector('#summary');
+/**
+ * An instance of ExtractTextPlugin
+ */
+const extractLess = new ExtractTextPlugin({
+    filename: fileNamePrefix + "[name].css",
+});
 
-    this.setWeather();
+/**
+ * Options to clean dist folder
+ */
+const pathsToClean = [
+  'dist'
+];
+const cleanOptions = {
+  root: __dirname,
+  verbose: true,
+  dry: false,
+  exclude: [],
+};
 
-    this.ticker = setInterval(this.displayTime.bind(this), 1000);
-  }
+module.exports = {
+  context: __dirname,
+  entry: {
+    home: './src/js/home.js',
+  },
+  output: {
+      path: __dirname + "/dist",
+      filename: fileNamePrefix + '[name].js',
+      publicPath: '/dist/',
+  },
+  devServer: { // Configuration for webpack-dev-server
+    compress: true,
+    port: 8080,
+    hot: true,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env'],
+            plugins: ['transform-custom-element-classes']
+          }
+        }
+      },
+      {
+        test: /\.(svg|eot|ttf|woff|woff2)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'fonts/[name].[ext]'
+        }
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        loaders: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              name: 'images/[name].[ext]'
+            }
+          },
+          'img-loader' // optional image compression remove this if img-loader binary build fails in your OS
+        ],
+      },
+      {
+        test: /\.(less|css)$/,
+        use:
+        isProduction
+        ?
+          extractLess.extract({ // Use the instance of ExtractTextPlugin for CSS files
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  sourceMap: true
+                }
+              },
+              {
+                loader: 'less-loader',
+                options: {
+                  sourceMap: true
+                }
+              }
+            ],
+            fallback: 'style-loader',
+          })
+        :
+          [
+            {
+              loader: 'style-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: "css-loader",
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: "less-loader",
+              options: {
+                sourceMap: true
+              }
+            }
+          ]
+      },
+    ],
+  },
+  devtool: 'source-map',
+  plugins: [
+    new webpack.ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      jquery: 'jquery'
+    }),
+    new webpack.DefinePlugin({ // Remove this plugin if you don't plan to define any global constants
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      SERVER_URL: JSON.stringify(process.env.SERVER_URL),
+    }),
+    // extractLess, // Make sure ExtractTextPlugin instance is included in array before the PurifyCSSPlugin
+    // new PurifyCSSPlugin({ // PurifyCSSPlugin disabled since it causes problems with bootstrap animation & toastr
+    //   paths: glob.sync(__dirname + '/*.html'),
+    //   minimize: true,
+    // }),
+  ],
+};
 
-  disconnectedCallback() {
-    clearInterval(this.ticker);
-  }
 
-  setWeather() {
-    if(this.latitude && this.longitude) {
-      apiCall(`getWeather/${this.latitude},${this.longitude}`, {}, 'GET')
-        .then(response => {
-
-          this.$city.textContent = response.city;
-          this.$temperature.textContent = `${response.currently.temperature}° F`;
-          this.$summary.textContent = response.currently.summary;
-
-          const skycons = new Skycons({"color": "black"});
-          skycons.add(this.$icon, Skycons[response.currently.icon.toUpperCase().replace(/-/g, "_")]);
-          skycons.play();
-        })
-        .catch(console.error);
-    }
-  }
-
-  displayTime() {
-    const date = new Date();
-    const displayTime = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-    const $time = this.$shadowRoot.querySelector('#time');
-    $time.textContent = displayTime;
-  }
-
-  static get observedAttributes() { return ['latitude', 'longitude']; }
-
-  attributeChangedCallback(attr, oldValue, newValue) {
-    if (attr === 'latitude' && oldValue !== newValue) {
-      this.latitude = newValue;
-      this.setWeather();
-    }
-    if(attr === 'longitude' && oldValue !== newValue) {
-      this.longitude = newValue;
-      this.setWeather();
-    }
-  }
-
-  get long() {
-    return this.longitude;
-  }
-
-  set long(long) {
-    this.longitude = long;
-    this.setWeather();
-  }
-
-  get lat() {
-    return this.latitude;
-  }
-
-  set lat(lat) {
-    this.latitude = lat;
-    this.setWeather();
-  }
+/**
+ * Non-Production plugins
+ */
+if(!isProduction) {
+  module.exports.plugins.push(
+    new webpack.HotModuleReplacementPlugin() // HMR plugin will cause problems with [chunkhash]
+  );
 }
 
-export default Weather;
+/**
+ * Production only plugins
+ */
+if(isProduction) {
+  module.exports.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true // use false if you want to disable source maps in production
+    }),
+    function() { // Create a manifest.json file that contain the hashed file names of generated static resources
+      this.plugin("done", function(status) {
+        require("fs").writeFileSync(
+          __dirname + "/dist/manifest.json",
+          JSON.stringify(status.toJson().assetsByChunkName)
+        );
+      });
+    },
+    new CleanWebpackPlugin(pathsToClean, cleanOptions)
+  );
+}

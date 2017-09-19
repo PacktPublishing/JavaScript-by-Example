@@ -1,20 +1,95 @@
-const actions = {
+import initialState from '../store/initialState';
+import actions from '../actionTypes/actionTypes';
 
-  GET_POSTS_AJAX_CALL_START : 'GET_POSTS_AJAX_CALL_START',
-  GET_POSTS_AJAX_CALL_SUCCESS: 'GET_POSTS_AJAX_CALL_SUCCESS',
-  GET_POSTS_AJAX_CALL_FAILURE: 'GET_POSTS_AJAX_CALL_FAILURE',
-  GET_POSTS: 'GET_POSTS',
+const ajaxCallsReducer = (state = initialState.ajaxCalls, action) => {
+  switch(action.type) {
 
-  GET_AUTHORS_AJAX_CALL_START: 'GET_AUTHORS_AJAX_CALL_START',
-  GET_AUTHORS_AJAX_CALL_SUCCESS: 'GET_AUTHORS_AJAX_CALL_SUCCESS',
-  GET_AUTHORS_AJAX_CALL_FAILURE: 'GET_AUTHORS_AJAX_CALL_FAILURE',
-  GET_AUTHORS: 'GET_AUTHORS',
+    case actions.GET_POSTS_AJAX_CALL_START:
+      return {
+        ...state,
+        getAllPosts: {
+          loading: true,
+          hasError: false,
+        },
+      };
 
-  ADD_POST_AJAX_CALL_START: 'ADD_POST_AJAX_CALL_START',
-  ADD_POST_AJAX_CALL_SUCCESS: 'ADD_POST_AJAX_CALL_SUCCESS',
-  ADD_POST_AJAX_CALL_FAILURE: 'ADD_POST_AJAX_CALL_FAILURE',
-  ADD_POST: 'ADD_POST',
+    case actions.GET_POSTS_AJAX_CALL_SUCCESS:
+      return {
+        ...state,
+        getAllPosts: {
+          loading: false,
+          hasError: false,
+        },
+      };
 
+
+    case actions.GET_POSTS_AJAX_CALL_FAILURE:
+      return {
+        ...state,
+        getAllPosts: {
+          loading: false,
+          hasError: true,
+        },
+      };
+
+
+    case actions.GET_AUTHORS_AJAX_CALL_START:
+      return {
+        ...state,
+        getAuthors: {
+          loading: true,
+          hasError: false,
+        },
+      };
+
+    case actions.GET_AUTHORS_AJAX_CALL_SUCCESS:
+      return {
+        ...state,
+        getAuthors: {
+          loading: false,
+          hasError: false,
+        },
+      };
+
+    case actions.GET_AUTHORS_AJAX_CALL_FAILURE:
+      return {
+        ...state,
+        getAuthors: {
+          loading: false,
+          hasError: true,
+        },
+      };
+
+    case actions.ADD_POST_AJAX_CALL_START:
+      return {
+        ...state,
+        addPost: {
+          loading: true,
+          hasError: false,
+        },
+      };
+
+    case actions.ADD_POST_AJAX_CALL_SUCCESS:
+      return {
+        ...state,
+        addPost: {
+          loading: false,
+          hasError: false,
+        },
+      };
+
+    case actions.ADD_POST_AJAX_CALL_FAILURE:
+      return {
+        ...state,
+        addPost: {
+          loading: false,
+          hasError: true,
+        },
+      };
+
+    default:
+      return state;
+  }
 };
 
-export default actions;
+export default ajaxCallsReducer;

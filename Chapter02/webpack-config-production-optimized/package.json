@@ -1,53 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Meme Creator</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-</head>
-<body>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/">Meme Creator</a>
-      </div>
-      <div id="navbar" class="collapse navbar-collapse">
-      </div>
-      <!--/.nav-collapse -->
-    </div>
-  </nav>
-
-    <div class="body">
-
-      <div class="canvas-area">
-        <canvas id="imgCanvas" class="img-canvas">
-          Canvas Not supported in your browser... Sorry!
-        </canvas>
-      </div>
-
-      <div class="input-area">
-
-        <div class="form-group">
-          <label for="image">Source Image:</label>
-          <input type="file" id="image" class="form-control">
-        </div>
-
-        <div class="form-group">
-          <label for="topText">Top Text:</label>
-          <input type="text" id="topText" class="form-control">
-        </div>
-
-        <div class="form-group">
-          <label for="bottomText">Bottom Text:</label>
-          <input type="text" id="bottomText" class="form-control">
-        </div>
-
-        <a class="btn btn-primary download-button" id="downloadMeme" download="meme.png">Download</a>
-
-      </div>
-
-    </div>
-</body>
-</html>
+{
+  "name": "meme-creator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack",
+    "watch": "webpack-dev-server"
+  },
+  "author": "Dani Akash S",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.4.0",
+    "babel-preset-es2015": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.16",
+    "css-loader": "^0.28.1",
+    "dotenv": "^4.0.0",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.1",
+    "img-loader": "^2.0.0",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
+    "purifycss-webpack": "^0.6.2",
+    "style-loader": "^0.17.0",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1"
+  }
+}

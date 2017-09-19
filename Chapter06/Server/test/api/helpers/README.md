@@ -1,1 +1,1 @@
-Place your controller tests in this directory.
+Place your helper tests in this directory.

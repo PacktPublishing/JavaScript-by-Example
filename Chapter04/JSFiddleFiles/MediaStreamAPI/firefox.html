@@ -1,0 +1,13 @@
+<video></video>
+<script>
+const $video = document.querySelector('video');
+navigator.mediaDevices.getUserMedia({audio: true, video: true})
+.then(stream => {
+  $video.srcObject = stream;
+  $video.muted = true;
+  $video.onloadedmetadata = function(e) {
+    $video.play();
+  };
+})
+.catch(console.error);
+</script>

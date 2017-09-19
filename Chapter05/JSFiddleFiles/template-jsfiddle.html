@@ -1,186 +1,41 @@
-/**
- * Environment variables used in this configuration:
- * NODE_ENV
- * API_KEY
- */
+<body>
+  <template id="image-template">
+    <div>
+      <h2>Javascript</h2>
+      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/4621/javascript.png" alt="js-logo" style="height: 50px; width: 50px;">
+    </div>
+  </template>
+</body>
 
-require('dotenv').config()
-const webpack = require('webpack');
-const glob = require('glob');
-const PurifyCSSPlugin = require('purifycss-webpack');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-
-/**
- * flag Used to check if the environment is production or not
- */
-const isProduction = (process.env.NODE_ENV === 'production');
+<script>
+const $body = document.querySelector('body');
 
 /**
- * Include hash to filenames for cache busting - only at production
+ * Get Reference to Template
  */
-const fileNamePrefix = isProduction? '[chunkhash].' : '';
+const $template = document.querySelector('#image-template');
+
+const $javascript = document.importNode($template.content, true); // Make deep copy of the template
+$body.appendChild($javascript); // Append it to the DOM
+
+const $ruby = document.importNode($template.content, true); // Make deep copy of the template
 
 /**
- * An instance of ExtractTextPlugin
+ * Make modifications to the Deep Copy
  */
-const extractLess = new ExtractTextPlugin({
-    filename: fileNamePrefix + "[name].css",
-});
+$ruby.querySelector('h2').textContent = "Ruby";
+$ruby.querySelector('img').setAttribute('src', 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/4621/ruby.png');
 
 /**
- * Options to clean dist folder
+ * Append the modified element to the DOM
  */
-const pathsToClean = [
-  'dist'
-];
-const cleanOptions = {
-  root: __dirname,
-  verbose: true,
-  dry: false,
-  exclude: [],
-};
-
-module.exports = {
-  context: __dirname,
-  entry: {
-    home: './src/js/home.js',
-  },
-  output: {
-      path: __dirname + "/dist",
-      filename: fileNamePrefix + '[name].js',
-      publicPath: '/dist/',
-  },
-  devServer: { // Configuration for webpack-dev-server
-    compress: true,
-    port: 8080,
-    hot: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['env'],
-            plugins: ['transform-custom-element-classes']
-          }
-        }
-      },
-      {
-        test: /\.(svg|eot|ttf|woff|woff2)$/,
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: 'fonts/[name].[ext]'
-        }
-      },
-      {
-        test: /\.(png|jpg|gif)$/,
-        loaders: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 10000,
-              name: 'images/[name].[ext]'
-            }
-          },
-          'img-loader' // optional image compression remove this if img-loader binary build fails in your OS
-        ],
-      },
-      {
-        test: /\.(less|css)$/,
-        use:
-        isProduction
-        ?
-          extractLess.extract({ // Use the instance of ExtractTextPlugin for CSS files
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  sourceMap: true
-                }
-              },
-              {
-                loader: 'less-loader',
-                options: {
-                  sourceMap: true
-                }
-              }
-            ],
-            fallback: 'style-loader',
-          })
-        :
-          [
-            {
-              loader: 'style-loader',
-              options: {
-                sourceMap: true
-              }
-            },
-            {
-              loader: "css-loader",
-              options: {
-                sourceMap: true
-              }
-            },
-            {
-              loader: "less-loader",
-              options: {
-                sourceMap: true
-              }
-            }
-          ]
-      },
-    ],
-  },
-  devtool: 'source-map',
-  plugins: [
-    new webpack.ProvidePlugin({
-      jQuery: 'jquery',
-      $: 'jquery',
-      jquery: 'jquery'
-    }),
-    new webpack.DefinePlugin({ // Remove this plugin if you don't plan to define any global constants
-      NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      SERVER_URL: JSON.stringify(process.env.SERVER_URL),
-    }),
-    // extractLess, // Make sure ExtractTextPlugin instance is included in array before the PurifyCSSPlugin
-    // new PurifyCSSPlugin({ // PurifyCSSPlugin disabled since it causes problems with bootstrap animation & toastr
-    //   paths: glob.sync(__dirname + '/*.html'),
-    //   minimize: true,
-    // }),
-  ],
-};
-
+$body.appendChild($ruby);
 
 /**
- * Non-Production plugins
+ * Repeat the same step again to add more elements
  */
-if(!isProduction) {
-  module.exports.plugins.push(
-    new webpack.HotModuleReplacementPlugin() // HMR plugin will cause problems with [chunkhash]
-  );
-}
-
-/**
- * Production only plugins
- */
-if(isProduction) {
-  module.exports.plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true // use false if you want to disable source maps in production
-    }),
-    function() { // Create a manifest.json file that contain the hashed file names of generated static resources
-      this.plugin("done", function(status) {
-        require("fs").writeFileSync(
-          __dirname + "/dist/manifest.json",
-          JSON.stringify(status.toJson().assetsByChunkName)
-        );
-      });
-    },
-    new CleanWebpackPlugin(pathsToClean, cleanOptions)
-  );
-}
+const $python = document.importNode($template.content, true);
+$python.querySelector('h2').textContent = "Python";
+$python.querySelector('img').setAttribute('src', 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/4621/python.png');
+$body.appendChild($python);
+</script>
