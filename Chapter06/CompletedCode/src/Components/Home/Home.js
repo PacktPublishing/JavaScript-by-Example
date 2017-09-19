@@ -1,15 +1,57 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PostSummary from '../Common/PostSummary';
+import ErrorMessage from '../Common/ErrorMessage';
 
-const SuccessMessage = ({title, message}) => (
-  <div className="alert alert-success">
-    <strong>{title}</strong> {message}
-  </div>
-);
+import apiCall from '../../services/api/apiCall';
+import LoadingIndicator from '../Common/LoadingIndicator';
 
-SuccessMessage.propTypes = {
-  title: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
-};
+class Home extends Component {
 
-export default SuccessMessage;
+  constructor() {
+    super();
+
+    this.state = {
+      posts: [],
+      loading: false,
+      hasError: false,
+    };
+  }
+
+  componentWillMount() {
+    this.setState({loading: true});
+    apiCall('posts', {}, 'GET')
+    .then(posts => {
+      this.setState({posts, loading: false});
+    })
+    .catch(error => {
+      this.setState({hasError: true, loading: false});
+      console.error(error);
+    });
+  }
+
+  render () {
+    return (
+      <div className={`posts-container container`}>
+        {
+          this.state.loading
+          ?
+            <LoadingIndicator />
+          :
+            null
+        }
+        {
+          this.state.hasError
+          ?
+            <ErrorMessage title={'Error!'} message={'Unable to retrieve posts!'} />
+          :
+            null
+        }
+        {
+          this.state.posts.map(post => <PostSummary key={post.id} post={post}>Post</PostSummary>)
+        }
+      </div>
+    );
+  }
+}
+
+export default Home;

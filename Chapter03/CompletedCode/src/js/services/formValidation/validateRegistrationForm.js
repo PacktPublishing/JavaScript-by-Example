@@ -1,42 +1,49 @@
-const timeoutDuration = 5000;
+export default function validateRegistrationForm(formValues) {
 
-export default function apiCall(route, body = {}, method='GET') {
-    const request = new Promise((resolve, reject) => {
+  const result = {
+    username: validateUserName(formValues.username),
+    email: validateEmail(formValues.email),
+    phone: validatePhone(formValues.phone),
+    age: validateAge(formValues.age),
+    profession: validateProfession(formValues.profession),
+    experience: validateExperience(formValues.experience),
+  };
 
-      const headers = new Headers({
-        'Content-Type': 'application/json',
-      });
+  let field, isValid = true;
+  for(field in result) {
+    isValid = isValid && result[field];
+  }
 
-      const requestDetails = {
-        method,
-        mode: 'cors',
-        headers,
-      };
+  return {
+    isValid,
+    result,
+  };
 
-      if(method !== 'GET') requestDetails.body = JSON.stringify(body);
+}
 
-      function handleErrors(response) {
-        if(response.ok) {
-          return response.json();
-        } else {
-          throw Error(response.statusText);
-        }
-      }
+function validateUserName(name) {
+  return name.length > 3;
+}
 
-      fetch(`${SERVER_URL}/${route}`, requestDetails)
-        .then(handleErrors)
-        .then(resolve)
-        .catch(reject);
+function validateEmail(email) {
+  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return emailRegex.test(email);
+}
 
-    });
+function validatePhone(phone) {
+  const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+  return phoneRegex.test(phone);
+}
 
-    const timeout = new Promise((request, reject) => {
-      setTimeout(reject, timeoutDuration, `Request timed out!`);
-    });
+function validateAge(age) {
+  return age >= 10 && age <= 25;
+}
 
-    return new Promise((resolve, reject) => {
-      Promise.race([request, timeout])
-        .then(resolve)
-        .catch(reject);
-    });
+function validateProfession(profession) {
+  const acceptedValues = ['school','college','trainee','employee'];
+  return acceptedValues.indexOf(profession) > -1;
+}
+
+function validateExperience(experience) {
+  return experience > 0 && experience < 4;
 }

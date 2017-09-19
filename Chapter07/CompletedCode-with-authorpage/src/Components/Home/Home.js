@@ -1,15 +1,45 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import PostSummary from '../Common/PostSummary';
+import ErrorMessage from '../Common/ErrorMessage';
 
-const SuccessMessage = ({title, message}) => (
-  <div className="alert alert-success">
-    <strong>{title}</strong> {message}
-  </div>
-);
+import apiCall from '../../services/api/apiCall';
+import LoadingIndicator from '../Common/LoadingIndicator';
 
-SuccessMessage.propTypes = {
-  title: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
-};
+import { connect } from 'react-redux';
 
-export default SuccessMessage;
+class Home extends Component {
+
+  render () {
+    return (
+      <div className={`posts-container container`}>
+        {
+          this.props.loading
+          ?
+            <LoadingIndicator />
+          :
+            null
+        }
+        {
+          this.props.hasError
+          ?
+            <ErrorMessage title={'Error!'} message={'Unable to retrieve posts!'} />
+          :
+            null
+        }
+        {
+          this.props.posts.map(post => <PostSummary key={post.id} post={post}>Post</PostSummary>)
+        }
+      </div>
+    );
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    posts: state.posts,
+    loading: state.ajaxCalls.getAllPosts.loading,
+    hasError: state.ajaxCalls.getAllPosts.hasError,
+  };
+}
+
+export default connect(mapStateToProps)(Home);

@@ -1,24 +1,9 @@
-const initialState = {
-  posts: [
-
-  ],
-  authors: [
-
-  ],
-  ajaxCalls: {
-    getAllPosts: {
-      loading: false,
-      hasError: false,
-    },
-    getAuthors: {
-      loading: false,
-      hasError: false,
-    },
-    addPost: {
-      loading: false,
-      hasError: false,
-    }
-  }
+const routes = {
+  home: '/home',
+  authors: '/authors',
+  author: '/author/:authorname',
+  newPost: '/new-post',
+  post: '/post/:id',
 };
 
-export default initialState;
+export default routes;

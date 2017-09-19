@@ -1,9 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const LoadingIndicator = () => (
-  <div className={`container`}>
-    <img src={require('../../assets/images/loading.gif')} alt="loading-info" className="loadingIndicator" />
+const SuccessMessage = ({title, message}) => (
+  <div className="alert alert-success">
+    <strong>{title}</strong> {message}
   </div>
 );
 
-export default LoadingIndicator;
+SuccessMessage.propTypes = {
+  title: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+};
+
+export default SuccessMessage;

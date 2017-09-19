@@ -1,1 +1,153 @@
-Place controllers for mock mode in this directory.
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: React Blog App
+  description: APIs for the Blog App created in React and Redux chapters of Javascript By Example book.
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /posts:
+    x-swagger-router-controller: posts
+    get:
+      description: returns all the posts
+      operationId: posts
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Post"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /authors:
+    x-swagger-router-controller: authors
+    get:
+      description: returns all the authors
+      operationId: authors
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              type: string
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /post:
+    x-swagger-router-controller: post
+    post:
+      description: add a single post
+      operationId: addPost
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "The new post added by the author"
+          required: true
+          schema:
+            $ref: "#/definitions/Post"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /post/{id}:
+    x-swagger-router-controller: post
+    get:
+      description: get a single post by id
+      operationId: post
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the post to return"
+          required: true
+          type: string
+          format: int64
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Post"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /author/{name}:
+    x-swagger-router-controller: posts
+    get:
+      description: returns posts of the selected authors
+      operationId: author
+      parameters:
+        - name: name
+          in: path
+          description: "name of the author who's posts should be listed"
+          required: true
+          type: string
+          format: int64
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Post"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  SuccessResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  Post:
+    type: object
+    required:
+      - id
+      - title
+      - content
+      - datetime
+      - author
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      content:
+        type: string
+      datetime:
+        type: string
+      author:
+        type: string

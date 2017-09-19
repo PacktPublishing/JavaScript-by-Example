@@ -1,42 +1,54 @@
-const timeoutDuration = 5000;
+import '../css/styles.css';
 
-export default function apiCall(route, body = {}, method='GET') {
-    const request = new Promise((resolve, reject) => {
+import Weather from './CustomElements/Weather/Weather';
 
-      const headers = new Headers({
-        'Content-Type': 'application/json',
-      });
+import 'webcomponents.js';
 
-      const requestDetails = {
-        method,
-        mode: 'cors',
-        headers,
-      };
+window.addEventListener('WebComponentsReady', () => {
+  customElements.define('x-weather', Weather);
+  getLocation();
+});
 
-      if(method !== 'GET') requestDetails.body = JSON.stringify(body);
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, errorPosition);
+  } else {
+    console.error("Geolocation is not supported by this browser.");
+  }
+}
 
-      function handleErrors(response) {
-        if(response.ok) {
-          return response.json();
-        } else {
-          throw Error(response.statusText);
-        }
-      }
+function showPosition(position) {
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
 
-      fetch(`${SERVER_URL}/${route}`, requestDetails)
-        .then(handleErrors)
-        .then(resolve)
-        .catch(reject);
+  function createWeatherElement(className) {
+    const $weather = document.createElement('x-weather');
+    $weather.setAttribute('latitude', latitude);
+    $weather.setAttribute('longitude', longitude);
+    $weather.setAttribute('class', className);
 
-    });
+    return $weather;
+  };
 
-    const timeout = new Promise((request, reject) => {
-      setTimeout(reject, timeoutDuration, `Request timed out!`);
-    });
+  const $largeContainer = document.querySelector('.large-container');
+  const $mediumContainer = document.querySelector('.medium-container');
+  const $smallContainer = document.querySelector('.small-container');
 
-    return new Promise((resolve, reject) => {
-      Promise.race([request, timeout])
-        .then(resolve)
-        .catch(reject);
-    });
+  $largeContainer.appendChild(createWeatherElement('large'));
+  $mediumContainer.appendChild(createWeatherElement('medium'));
+  // $smallContainer.appendChild(createWeatherElement('small'));
+
+  const $small = createWeatherElement('small');
+  $smallContainer.appendChild($small);
+
+  setTimeout(() => {
+    console.log($small.lat, $small.long);
+    $small.lat = 51.5074;
+    $small.long = 0.1278;
+    console.log($small.lat, $small.long);
+  }, 10000);
+}
+
+function errorPosition(error) {
+  console.error(error);
 }
