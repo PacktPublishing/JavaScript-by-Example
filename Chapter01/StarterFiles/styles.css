@@ -12,9 +12,9 @@ body {
   margin: 25px;
 }
 .task-text {
-    display: flex;
-    align-items: center;
-    height: 40px;
+  display: flex;
+  align-items: center;
+  height: 40px;
 }
 .hidden {
   display: none;
