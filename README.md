@@ -7,6 +7,8 @@ You'll also develop a responsive Event Registration form that allows users to re
 
 Towards the end of the book, you will meet React, Facebook's JavaScript library for building user interfaces. You'll throw together a blog with React, and get a feel for why this kind of JavaScript framework is used to build large-scale applications. To make your blog more maintainable and scalable, you'll use Redux to manage data across React components.
 
+Test 123
+
 ## Instructions and Navigation
 All of the code is organized into folders. Each folder starts with a number followed by the application name. For example, Chapter02.
 
