@@ -12,7 +12,7 @@ class ToDoClass {
       this.loadTasks();
       this.addEventListeners();
     }
-
+   console.log("sample");
     addEventListeners() {
 
       // Add Task
